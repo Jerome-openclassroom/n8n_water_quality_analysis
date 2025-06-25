@@ -33,7 +33,6 @@ final_report_En_Fr/                        # 📬 Example outputs of the workflo
 Workflow_screenshot_and_description/      # 🖼️ Technical and visual documentation of the workflow
 ├── Workflow 11.jpg                           # Screenshot of the n8n workflow
 ├── My_workflow_11.json                       # Native JSON export of the scenario
-├── Workflow_11.txt                           # Functional description with JS and comments
 └── Workflow_11_principles_Fr_En.txt         # Summary of principles (bilingual notes)
 ```
 
