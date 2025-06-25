@@ -1,0 +1,176 @@
+{
+  "name": "My workflow 11",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1obHyZ6Jh7w28HcYC3o1nTMc_SLQg2y8xxQjaMlhz44U",
+          "mode": "list",
+          "cachedResultName": "Analyse eau pour IA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1obHyZ6Jh7w28HcYC3o1nTMc_SLQg2y8xxQjaMlhz44U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1obHyZ6Jh7w28HcYC3o1nTMc_SLQg2y8xxQjaMlhz44U/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -480,
+        -40
+      ],
+      "id": "2bb14194-e301-439e-903c-d7de0b0266b7",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Wdpi5xiRQky4eHiF",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Voici une série de relevés de terrain pour l’analyse de la qualité de l’eau dans trois points de prélèvement.\n\nDonnées :\n\n{{JSON.stringify($json.releves, null, 2)}}\n\nPour chaque relevé :\n- Commente la température (eau froide ou tiède),\n- Interprète le pH (acide, neutre, basique),\n- Analyse la conductivité (niveau de minéralisation),\n- Commente l’oxygène dissous (bon niveau, aération, possible pollution ou stress),\n- Donne un avis global sur la qualité de l’eau à ce point.\n\nTermine par une synthèse globale des trois sites.\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -40,
+        -40
+      ],
+      "id": "f711bd1a-3a10-4cbc-b8fb-f58571aaa94f",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Usdl576VKQRGJfjf",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "jerome.frasson84@gmail.com",
+        "subject": "Bilan d'analyse d'eau vive",
+        "emailType": "text",
+        "message": "={{ $json.message.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        320,
+        -40
+      ],
+      "id": "eab6c2e1-b0a6-424a-ba5e-cf7cbf4a8027",
+      "name": "Gmail",
+      "webhookId": "14398271-ad74-403b-a07a-5fe22ce18bb6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kItbLOMBSUDhpsef",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Initialiser un tableau pour contenir tous les relevés\nconst lignesFusionnées = [];\n\nfor (let i = 0; i < items.length; i++) {\n  lignesFusionnées.push({\n    lieu: items[i].json[\"Lieu de prélèvement\"],\n    date: items[i].json[\"Date\"],\n    temperature: items[i].json[\"Température (°C)\"],\n    pH: items[i].json[\"pH\"],\n    conductivite: items[i].json[\"Conductivité (µS/cm)\"],\n    oxygene: items[i].json[\"Oxygène dissous (mg/L)\"]\n  });\n}\n\nreturn [\n  {\n    json: {\n      releves: lignesFusionnées\n    }\n  }\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        -40
+      ],
+      "id": "982405a6-11be-46e0-8cc5-72cf08a62f42",
+      "name": "Code"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        -40
+      ],
+      "id": "f667362c-c2ba-48da-8130-0ac7f6d1a02e",
+      "name": "When clicking ‘Test workflow 11’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow 11’": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "acc7a914-6116-48eb-bfda-a4e47fadd2e0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "433137eccf40788d51aeaa302d84f603550f3edd3d459f6e5ab32515acc034c2"
+  },
+  "id": "KbmCNZYR39fepV4A",
+  "tags": []
+}

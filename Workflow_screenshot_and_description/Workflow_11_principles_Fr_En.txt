@@ -1,0 +1,8 @@
+Workflow 11 :
+Prend les données situées dans Google sheet : paramètres écologiques mesurés en eau vive (température, conductivité, pH, O2 dissous) avec lieu et date.
+Un node code les regroupe dans un JSON directement interprétable par GPT4 (openAI).
+L'interprétation est renvoyée ensuite par mail au format texte (pour utiliser les retours à la ligne \n).
+
+
+Workflow 11: 
+Takes ecological parameters measured in freshwater (temperature, conductivity, pH, dissolved oxygen), along with location and date, from a Google Sheet. A code node consolidates them into a JSON format directly interpretable by GPT-4 (OpenAI). The interpretation is then sent via email in plain text format (to preserve line breaks with \n).
